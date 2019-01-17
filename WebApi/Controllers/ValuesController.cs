@@ -7,6 +7,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Dependencies;
+using WebApi.Models;
+using System.Web.Http.Controllers;
 
 namespace WebApi.Controllers
 {
@@ -25,6 +28,21 @@ namespace WebApi.Controllers
             {
                 MaxAge = TimeSpan.FromMinutes(20)
             };
+            return response;
+        }
+
+        public HttpResponseMessage Get2()
+        {
+            var dependencyResolver = GlobalConfiguration.Configuration.DependencyResolver;
+            var controller = dependencyResolver.GetService(typeof(ProductsController));
+            ProductsController productsController = controller as ProductsController;
+            //productsController.ControllerContext //might need set value here
+
+            // Get a list of products from a database.
+            IEnumerable<Product> products = productsController.GetAllProducts();
+
+            // Write the list to the response body.
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, products);
             return response;
         }
     }
