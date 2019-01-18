@@ -23,6 +23,8 @@ namespace WebApi
                 routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.MessageHandlers.Add(new CustomMessageHandler());
         }
 
         private static void InitAutofac()
