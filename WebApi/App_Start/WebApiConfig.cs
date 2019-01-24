@@ -59,6 +59,7 @@ namespace WebApi
                 app.UseSwaggerUi(typeof(WebApiApplication).Assembly, settings =>
                 {
                     settings.MiddlewareBasePath = "/swagger";
+                    settings.GeneratorSettings.DefaultUrlTemplate = "api/{controller}/{action}/{id}";
                 });
             });
         }
