@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace WebApi
 {
@@ -13,9 +11,18 @@ namespace WebApi
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             string requestBody = await request.Content.ReadAsStringAsync();
-            Console.WriteLine(requestBody);
-            var result = await base.SendAsync(request, cancellationToken);
-            return result;
+            HttpResponseMessage responseMessage;
+            if (request.Method != HttpMethod.Post)
+            {
+                responseMessage = new HttpResponseMessage {StatusCode = HttpStatusCode.MethodNotAllowed};
+            }
+            else
+            {
+                Console.WriteLine(requestBody);
+                responseMessage = await base.SendAsync(request, cancellationToken);
+            }
+
+            return responseMessage;
         }
     }
 }
