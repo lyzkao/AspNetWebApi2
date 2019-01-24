@@ -19,11 +19,13 @@ namespace WebApi.Controllers
             new Product { Id = 3, Name = "Hammer", Category = "Hardware", Price = 16.99M }
         };
 
+        [HttpPost]
         public IEnumerable<Product> GetAllProducts()
         {
             return products;
         }
 
+        [HttpPost]
         public IHttpActionResult GetProduct(int id)
         {
             var product = products.FirstOrDefault((p) => p.Id == id);
@@ -34,11 +36,12 @@ namespace WebApi.Controllers
             return Ok(product);  // Returns an OkNegotiatedContentResult
         }
 
-        [HttpGet]
+        [HttpPost]
         public void Post()
         {
         }
 
+        [HttpPost]
         public HttpResponseMessage Get()
         {
             HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, "value");
@@ -50,6 +53,7 @@ namespace WebApi.Controllers
             return response;
         }
 
+        [HttpPost]
         public HttpResponseMessage Get2()
         {
             // Write the list to the response body.
@@ -57,6 +61,7 @@ namespace WebApi.Controllers
             return response;
         }
 
+        [HttpPost]
         public IHttpActionResult Get3()
         {
             return new TextResult("hello", Request);
