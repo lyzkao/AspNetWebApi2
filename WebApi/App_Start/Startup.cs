@@ -1,16 +1,33 @@
-﻿using Autofac;
-using Autofac.Integration.WebApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Web.Http;
+using Autofac;
+using Autofac.Integration.WebApi;
+using NSwag.AspNet.Owin;
+using Owin;
 
 namespace WebApi
 {
-    public static class WebApiConfig
+    public class Startup
     {
-        public static void Register(HttpConfiguration config)
+        public void Configuration(IAppBuilder app)
+        {
+            var config = new HttpConfiguration();
+
+            app.UseSwaggerUi3(typeof(Startup).Assembly, settings =>
+            {
+                // configure settings here
+                // settings.GeneratorSettings.*: Generator settings and extension points
+                // settings.*: Routing and UI settings
+                settings.MiddlewareBasePath = "/swagger";
+                settings.GeneratorSettings.DefaultUrlTemplate = "api/{controller}/{action}/{id}";
+            });
+            app.UseWebApi(config);
+
+            Register(config);
+            config.EnsureInitialized();
+        }
+
+        public void Register(HttpConfiguration config)
         {
             // Web API configuration and services
             InitAutofac();
@@ -27,7 +44,7 @@ namespace WebApi
             config.MessageHandlers.Add(new CustomMessageHandler());
         }
 
-        private static void InitAutofac()
+        private void InitAutofac()
         {
             var builder = new ContainerBuilder();
 
@@ -47,6 +64,5 @@ namespace WebApi
             var container = builder.Build();
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
         }
-
     }
 }
