@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.Http;
+using System.Web.Routing;
+using NSwag.AspNet.Owin;
 
 namespace WebApi
 {
@@ -14,6 +16,8 @@ namespace WebApi
         {
             // Web API configuration and services
             InitAutofac();
+
+            RegisterNSwag();
 
             // Web API routes
             config.MapHttpAttributeRoutes();
@@ -46,6 +50,17 @@ namespace WebApi
             // Set the dependency resolver to be Autofac.
             var container = builder.Build();
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+        }
+
+        public static void RegisterNSwag()
+        {
+            RouteTable.Routes.MapOwinPath("swagger", app =>
+            {
+                app.UseSwaggerUi(typeof(WebApiApplication).Assembly, settings =>
+                {
+                    settings.MiddlewareBasePath = "/swagger";
+                });
+            });
         }
 
     }
