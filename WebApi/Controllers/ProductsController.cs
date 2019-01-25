@@ -19,7 +19,7 @@ namespace WebApi.Controllers
             new Product { Id = 3, Name = "Hammer", Category = "Hardware", Price = 16.99M }
         };
 
-        [HttpPost]
+        [HttpGet]
         public IEnumerable<Product> GetAllProducts()
         {
             return products;
